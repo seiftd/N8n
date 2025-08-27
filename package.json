@@ -1,0 +1,47 @@
+{
+  "name": "sbaro",
+  "version": "1.0.0",
+  "description": "A robust, scalable, and user-friendly workflow automation platform",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:services\" \"npm run dev:api\" \"npm run dev:frontend\"",
+    "dev:services": "docker-compose up -d postgres redis",
+    "dev:api": "cd apps/api && npm run start:dev",
+    "dev:frontend": "cd apps/frontend && npm run dev",
+    "build": "npm run build:api && npm run build:frontend",
+    "build:api": "cd apps/api && npm run build",
+    "build:frontend": "cd apps/frontend && npm run build",
+    "test": "npm run test:api && npm run test:frontend",
+    "test:api": "cd apps/api && npm test",
+    "test:frontend": "cd apps/frontend && npm test",
+    "services:up": "docker-compose up -d",
+    "services:down": "docker-compose down",
+    "services:logs": "docker-compose logs -f",
+    "db:reset": "docker-compose down postgres && docker volume rm sbaro_postgres_data && docker-compose up -d postgres"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seiftd/sbaro.git"
+  },
+  "keywords": [
+    "workflow",
+    "automation",
+    "no-code",
+    "low-code",
+    "workflow-engine"
+  ],
+  "author": "Sbaro Team",
+  "license": "MIT"
+}

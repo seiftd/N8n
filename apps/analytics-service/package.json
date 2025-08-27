@@ -1,0 +1,36 @@
+{
+  "name": "@sbaro/analytics-service",
+  "version": "1.0.0",
+  "description": "Sbaro Advanced Analytics and ML-Powered Insights Service",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "nest build",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/typeorm": "^10.0.0",
+    "@nestjs/config": "^3.0.0",
+    "@nestjs/schedule": "^4.0.0",
+    "typeorm": "^0.3.17",
+    "pg": "^8.11.3",
+    "clickhouse": "^2.6.0",
+    "@tensorflow/tfjs": "^4.15.0",
+    "@tensorflow/tfjs-node": "^4.15.0",
+    "ml-matrix": "^6.10.7",
+    "simple-statistics": "^7.8.3",
+    "d3": "^7.8.5",
+    "moment": "^2.29.4",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.0.0",
+    "@types/node": "^20.3.1",
+    "@types/lodash": "^4.14.200",
+    "typescript": "^5.1.3"
+  }
+}
