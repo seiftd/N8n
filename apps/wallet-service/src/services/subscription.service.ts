@@ -378,6 +378,7 @@ export class SubscriptionService {
 
   /**
    * Transfer SBARO tokens between users (FREE - no fees)
+   * Note: Welcome tokens CANNOT be transferred to other users
    */
   async transferTokensBetweenUsers(
     fromUserId: string,
@@ -399,10 +400,15 @@ export class SubscriptionService {
       }
 
       const transferAmount = new Decimal(amount);
-      const fromBalance = new Decimal(fromWallet.sbaroBalance);
-
-      if (fromBalance.lt(transferAmount)) {
-        return { success: false, error: 'Insufficient balance' };
+      
+      // Check available balance for transfers (excluding welcome tokens)
+      const availableForTransfer = await this.getTransferableBalance(fromUserId);
+      
+      if (new Decimal(availableForTransfer).lt(transferAmount)) {
+        return { 
+          success: false, 
+          error: `Insufficient transferable balance. Available: ${availableForTransfer} SBARO (welcome tokens cannot be transferred)` 
+        };
       }
 
       // Create transfer transaction (NO FEES!)
@@ -1065,5 +1071,39 @@ export class SubscriptionService {
 
   private async updateDiscountUsage(code: string): Promise<void> {
     await this.discountRepository.increment({ code }, 'currentUses', 1);
+  }
+
+  /**
+   * Get transferable balance (excluding welcome tokens)
+   */
+  async getTransferableBalance(userId: string): Promise<string> {
+    const wallet = await this.walletRepository.findOne({
+      where: { userId, isActive: true },
+    });
+
+    if (!wallet) {
+      return '0';
+    }
+
+    // Get all token restrictions for this user
+    const restrictions = await this.tokenRestrictionRepository.find({
+      where: { userId },
+    });
+
+    let totalBalance = new Decimal(wallet.sbaroBalance);
+    let restrictedAmount = new Decimal(0);
+
+    // Subtract welcome tokens and other non-transferable amounts
+    for (const restriction of restrictions) {
+      if (!restriction.restrictions.canUseForTransfers) {
+        const availableAmount = new Decimal(restriction.amount).minus(restriction.usedAmount);
+        if (availableAmount.gt(0)) {
+          restrictedAmount = restrictedAmount.plus(availableAmount);
+        }
+      }
+    }
+
+    const transferableBalance = totalBalance.minus(restrictedAmount);
+    return Decimal.max(transferableBalance, 0).toFixed(8);
   }
 }

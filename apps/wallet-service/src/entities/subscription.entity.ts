@@ -259,14 +259,14 @@ export class TokenRestriction extends BaseEntity {
   usedAmount: string;
 
   @Column({ type: 'jsonb' })
-  restrictions: {
-    canUseForSubscriptions: boolean;
-    canUseForTrading: boolean;
-    canUseForWorkflows: boolean;
-    canUseForTransfers: boolean;
-    expiresAt?: Date;
-    minimumHoldPeriod?: number; // days
-  };
+      restrictions: {
+      canUseForSubscriptions: boolean;
+      canUseForTrading: boolean;
+      canUseForWorkflows: boolean;
+      canUseForTransfers: boolean; // Welcome tokens CANNOT be transferred
+      expiresAt?: Date;
+      minimumHoldPeriod?: number; // days
+    };
 
   @Column()
   createdFrom: string; // transaction ID or source
