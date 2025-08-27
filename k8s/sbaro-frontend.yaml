@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sbaro-frontend-config
+  namespace: sbaro
+data:
+  VITE_API_URL: "https://api.sbaro.yourdomain.com"
+  VITE_APP_NAME: "Sbaro"
+  VITE_APP_VERSION: "2.0.0"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sbaro-frontend
+  namespace: sbaro
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sbaro-frontend
+  template:
+    metadata:
+      labels:
+        app: sbaro-frontend
+    spec:
+      containers:
+      - name: sbaro-frontend
+        image: sbaro/frontend:latest
+        ports:
+        - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: sbaro-frontend-config
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sbaro-frontend-service
+  namespace: sbaro
+spec:
+  selector:
+    app: sbaro-frontend
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP

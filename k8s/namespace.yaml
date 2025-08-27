@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sbaro
+  labels:
+    name: sbaro
+    app.kubernetes.io/name: sbaro
+    app.kubernetes.io/instance: sbaro
+    app.kubernetes.io/version: "2.0.0"
+    app.kubernetes.io/component: platform
