@@ -1,0 +1,30 @@
+{
+  "name": "@sbaro/quantum-service",
+  "version": "1.0.0",
+  "description": "Sbaro Quantum Computing Service - Quantum-Powered Optimization and ML",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "nest build",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "qiskit": "^0.45.0",
+    "cirq": "^1.0.0",
+    "pennylane": "^0.32.0",
+    "quantum-js": "^2.1.0",
+    "tensorflow-quantum": "^0.7.0",
+    "quantum-computing-simulator": "^1.0.0",
+    "quantum-algorithms": "^2.0.0",
+    "quantum-optimization": "^1.5.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.0.0",
+    "@types/node": "^20.6.3",
+    "typescript": "^5.2.2"
+  }
+}
